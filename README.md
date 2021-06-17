@@ -1,12 +1,12 @@
 # Robocup Project
 
-Our proposal https://docs.google.com/document/d/139C3r5uC-RRzDMXRm0g1Ai2ML-xSVXDXS0IiixRRfbA/edit?usp=sharing
+Our official proposal https://docs.google.com/document/d/139C3r5uC-RRzDMXRm0g1Ai2ML-xSVXDXS0IiixRRfbA/edit?usp=sharing
 
-## General TODO:
-- [ ] auf welche Genre beschränken
-- [ ] Länge der Musik/des dazugehörigen Tanzes festlegen
-  - z.B. Roboter braucht nur 5 Sekunden um Genre zu erkennen, dann geht Lied noch 20s und der Roboter tanzt diese 20 Sekunden lang passend
+### Flow chart:
+![grafik](https://user-images.githubusercontent.com/64356366/122386702-6c952d00-cf6e-11eb-851c-c7b550f97f2c.png)
+Visualisation of the interfaces between the certain components.
 
+To edit the chart: import the flowchart.drawio file on https://app.diagrams.net/, change it, export it as png and dont forget to save changes and reopload the updated .drawio file to github.   
 
 ## 1.) Sensing
 ### Recognize and read the music from microphone (played by external device) (Seraphin)
@@ -27,3 +27,9 @@ TODO:
 TODO:
 - [ ] Software installieren vom Video
 - [ ] Tfür jedes Genre einen Tanz/keyframes generieren
+
+## General TODO:
+- [ ] determine which genres we want to detect
+- [ ] determine length of the music and the corresponding dace. 
+    - e.g. robot needs 5 seconds to detect genre,  the music continues for 20 seconds while the robot dances. 
+   
