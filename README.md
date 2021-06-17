@@ -4,13 +4,13 @@ Our proposal https://docs.google.com/document/d/139C3r5uC-RRzDMXRm0g1Ai2ML-xSVXD
 
 ## Parts
 
-# 1.) Sensing
+## 1.) Sensing
 TODO:
 
 
-# 2.) Thinking
+## 2.) Thinking
 TODO:
 
 
-# 3.) Acting
+## 3.) Acting
 TODO:
