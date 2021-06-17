@@ -2,7 +2,6 @@
 
 Our proposal https://docs.google.com/document/d/139C3r5uC-RRzDMXRm0g1Ai2ML-xSVXDXS0IiixRRfbA/edit?usp=sharing
 
-## Parts
 
 ## 1.) Sensing
 TODO:
