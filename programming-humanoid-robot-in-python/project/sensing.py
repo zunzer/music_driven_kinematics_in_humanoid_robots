@@ -1,0 +1,1 @@
+#TODO: Recognize and read the music from computer microphone (played by external device)
