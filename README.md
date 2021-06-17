@@ -8,11 +8,13 @@ Our proposal https://docs.google.com/document/d/139C3r5uC-RRzDMXRm0g1Ai2ML-xSVXD
   - z.B. Roboter braucht nur 5 Sekunden um Genre zu erkennen, dann geht Lied noch 20s und der Roboter tanzt diese 20 Sekunden lang passend
 
 
-## 1.) Sensing: Recognize and read the music from microphone (played by external device) (Seraphin)
+## 1.) Sensing
+### Recognize and read the music from microphone (played by external device) (Seraphin)
 TODO:
 
 
-## 2.) Thinking: Process music and choose according genre and dance/keyframes (Cornelius)
+## 2.) Thinking
+### Process music and choose according genre and dance/keyframes (Cornelius)
 TODO:
 
 
@@ -24,4 +26,4 @@ TODO:
 
 TODO:
 - [ ] Software installieren vom Video
-- [ ] Tänze generieren für
+- [ ] Tfür jedes Genre einen Tanz/keyframes generieren
