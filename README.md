@@ -16,7 +16,8 @@ TODO:
 TODO:
 
 
-## 3.) Acting: Generate dance moves/keyframes (Emi)
+## 3.) Acting
+### Generate dance moves/keyframes (Emi)
 -- vielleicht orientieren an https://www.youtube.com/watch?v=ikNX8A-3P98 ? 
 - einzelne Bewegungen und die dann kombinieren lassen?
 - ganze Tänze implementieren, die abhängig vom Genre gewählt werden?
