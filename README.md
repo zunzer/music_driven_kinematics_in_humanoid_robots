@@ -21,6 +21,7 @@ TODO:
 ## 2.) Thinking
 ### Process music and choose according genre and dance/keyframes (Cornelius)
 TODO:
+- [ ] Be able to recognize music that is recorded from microphone. To do so either filter training data or change the NN.
 
 
 ## 3.) Acting

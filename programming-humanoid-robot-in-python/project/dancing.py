@@ -33,7 +33,6 @@ class DancingAgent(PostureRecognitionAgent):
         """
         get the file from sensing, predict genre from it and set keyframes
         """
-        print("thinking")
         scores = self.music_classifier.predict(self.music_file, verbose=0)
         music_genre = self.genres[scores.argmax(axis=-1)[0]]
         print(f"recognized the following genre: {music_genre}!")
