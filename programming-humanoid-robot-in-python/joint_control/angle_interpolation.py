@@ -20,8 +20,8 @@
 '''
 import numpy as np
 
-from joint_control.keyframes import leftBackToStand, rightBackToStand, leftBellyToStand, hello
-from joint_control.pid import PIDAgent
+from keyframes import leftBackToStand, rightBackToStand, leftBellyToStand, hello, RoboDance
+from pid import PIDAgent
 import logging
 
 
@@ -97,5 +97,5 @@ class AngleInterpolationAgent(PIDAgent):
 
 if __name__ == '__main__':
     agent = AngleInterpolationAgent()
-    agent.keyframes = leftBackToStand()  # CHANGE DIFFERENT KEYFRAMES
+    agent.keyframes = RoboDance()  # CHANGE DIFFERENT KEYFRAMES
     agent.run()
