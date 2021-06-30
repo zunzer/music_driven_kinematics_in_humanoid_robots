@@ -17,13 +17,16 @@ from struct import pack
 import pyaudio
 import wave
 import os
+import time
 
-THRESHOLD = 700
+THRESHOLD = 300
 CHUNK_SIZE = 1024
 FORMAT = pyaudio.paInt16
 RATE = 44100
 DIR_PATH = os.path.dirname(os.path.realpath(__file__))
 FILE_NAME = "\\recordings\\output_normalized.wav"
+REC_LENGTH = 10
+SILENCE_LEN = 300
 
 def is_silent(snd_data):
     '''
@@ -84,11 +87,10 @@ def deviceInfo():
     return int(input("Enter device number and press return: "))  #Note if input function is not working (e.g. in VSCode): Hardcode devicenumber here!
 
 
-def record():
+def record(index):
     """
     Record music from the selected microphone until silence
     """
-    index = deviceInfo()
 
     p = pyaudio.PyAudio()
 
@@ -96,12 +98,11 @@ def record():
         input=True, output=True,input_device_index = index,
         frames_per_buffer=CHUNK_SIZE)
 
-    num_silent = 0
     snd_started = False
-    print ("Recording...")
 
     r = array('h')
-    print('--     --', end='\r')
+    print ("-------------------------------------------------------------")
+    print ("Please start the music!", end="\r")
     while 1:
 
         snd_data = array('h', stream.read(CHUNK_SIZE))
@@ -111,17 +112,16 @@ def record():
 
         silent = is_silent(snd_data)
 
-        if silent and snd_started:
-            print('--     --', end='\r')
-            num_silent += 1
-        elif not silent and not snd_started:
+        if snd_started:
+            print("Still recording for " + str(round(REC_LENGTH-(time.time()-start_time),2)) + ' seconds...', end='\r')
+        
+        if not silent and not snd_started:        #first detected tone
+            print('Music start detected.    ')
             snd_started = True
-        else:
-            num_silent = 0
-            print('-- rec --', end='\r')
+            start_time = time.time()
 
-        if snd_started and num_silent > 100:
-            print ("Recording finished")
+        if snd_started and (time.time()-start_time)>REC_LENGTH:
+            print ("Finished recording.                              ")
             break
 
     sample_width = p.get_sample_size(FORMAT)
@@ -133,10 +133,10 @@ def record():
     r = trim(r)
     return sample_width, r
 
-def record_to_file():
+def record_to_file(index):
     path = DIR_PATH + FILE_NAME
 
-    sample_width, data = record()
+    sample_width, data = record(index)
     data = pack('<' + ('h'*len(data)), *data)
 
     wf = wave.open(path, 'wb')
@@ -145,6 +145,49 @@ def record_to_file():
     wf.setframerate(RATE)
     wf.writeframes(data)
     wf.close()
+    print("Updated " +FILE_NAME+" -> Call dance thread now")
+    waitForEnd(index)
+
+def waitForEnd(index):
+    """
+    wait until song stopped
+    """
+    p = pyaudio.PyAudio()
+
+    stream = p.open(format=FORMAT, channels=1, rate=RATE,
+        input=True, output=True,input_device_index = index,
+        frames_per_buffer=CHUNK_SIZE)
+
+    silence = 0
+    print("Robot should dance to current song :D")
+    
+    r = array('h')
+    while 1:
+        snd_data = array('h', stream.read(CHUNK_SIZE))
+        if byteorder == 'big':
+            snd_data.byteswap()
+        r.extend(snd_data)
+
+        silent = is_silent(snd_data)
+
+        if silent:
+            print("--         --", end="\r")
+            silence += 1
+        else: 
+            print("-- playing --                                                                  ", end="\r")
+            silence = 0
+        if silence == 0.4*SILENCE_LEN:
+            print("               Looks like music finished, robot will stop dancing in a moment..", end="\r")
+                
+        if silence>SILENCE_LEN:
+            print ("Song finished and robot sleeps! -> Make robot do nothing                              ")
+            break
+
+    stream.stop_stream()
+    stream.close()
+    p.terminate()
 
 if __name__ == '__main__':
-    record_to_file()
+    index = deviceInfo()
+    while 1:
+        record_to_file(index)
