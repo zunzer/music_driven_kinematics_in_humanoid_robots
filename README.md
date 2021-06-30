@@ -21,6 +21,7 @@ TODO:
 ### Process music and choose corresponding genre and dance/keyframes (Cornelius)
 TODO:
 - [ ] Be able to recognize music from file. To do so, either filter training data or change the NN.
+- [ ] Implement shazam-like recognition based on music fingerprints
 - [ ] Optional: Calculate bpm
 
 ## 3.) Acting
@@ -35,7 +36,8 @@ TODO:
 
 ## General TODO:
 - [ ] Determine which genres we want to detect
-- [ ] Determine the length of the music and the corresponding dace. 
+- [ ] Determine the length of the music and the corresponding dace.
+- [ ] Write the full loop 
 - [ ] Optional: Change speed of keyframes based on music 
 - [ ] Optional: Stop dancing if we stop music
    
