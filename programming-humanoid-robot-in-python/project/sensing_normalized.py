@@ -1,12 +1,35 @@
 '''
-To install pyaudio on windows (https://stackoverflow.com/questions/55936179/trying-to-install-pyaudio-using-pip): 
-- pip install pipwin          #pipwin is the same thing like pip, but with optimized packets for windows 
-- pipwin install pyaudio  
+Note: Due to the bad audio quality from microphones, we decided to use internal recorded sound. 
 
-Note: Due to the bad audio quality, you can setup the stereomix device in windows like this:
-https://www.howtogeek.com/howto/39532/how-to-enable-stereo-mix-in-windows-7-to-record-audio/
+WINDOWS: 
+    - In code set FILE_NAME = "\\recordings\\output_normalized.wav"
 
-Based on: https://stackoverflow.com/questions/40704026/voice-recording-using-pyaudio
+    - pip install pipwin          
+            #comment: pipwin = pip, but with optimized packets for windows 
+    - pipwin install pyaudio  
+    [https://stackoverflow.com/questions/55936179/trying-to-install-pyaudio-using-pip] 
+
+    - Setup the stereomix device in windows like this:
+    [https://www.howtogeek.com/howto/39532/how-to-enable-stereo-mix-in-windows-7-to-record-audio/]
+
+    - Select stereomix microphone as "Standardaufnahmegerät" and choose it at the beginning of the code 
+
+LINUX: 
+    - In code set FILE_NAME = "/recordings/output_normalized.wav"
+
+    - with conda/pip install portaudio and pyaudio
+    - Install voice control using "sudo apt-get install pavucontrol" and run it by using "pavucontrol"
+        https://stackoverflow.com/questions/65079325/problem-with-alsa-in-speech-recognitionpython-3
+    
+    - run this file in another terminal and select device "pulse" 
+    
+    - Select "Monitor of built-in audio" from register card "recordings" in voice control panel 
+
+
+--> Start and stop music as you like, notice the commandline output  
+
+
+Code based on: https://stackoverflow.com/questions/40704026/voice-recording-using-pyaudio
 and: https://gist.github.com/PandaWhoCodes/9f3dc05faee761149842e43b56e6ee8c
 '''
 
@@ -19,14 +42,14 @@ import wave
 import os
 import time
 
-THRESHOLD = 300
+FILE_NAME = "\\recordings\\output_normalized.wav"   #where to save recorded files 
+THRESHOLD = 300                                     #threshold how loud is silent
 CHUNK_SIZE = 1024
 FORMAT = pyaudio.paInt16
-RATE = 44100
+RATE = 44100                                            #pyaudio specific variables
 DIR_PATH = os.path.dirname(os.path.realpath(__file__))
-FILE_NAME = "\\recordings\\output_normalized.wav"
-REC_LENGTH = 10
-SILENCE_LEN = 300
+REC_LENGTH = 10                                         #length of recorded files
+SILENCE_THRESHOLD = 300                                  #duration until robot stops dancing if silence 
 
 def is_silent(snd_data):
     '''
@@ -89,34 +112,34 @@ def deviceInfo():
 
 def record(index):
     """
-    Record music from the selected microphone until silence
+    Record music from the selected microphone for selected time
     """
-
     p = pyaudio.PyAudio()
 
     stream = p.open(format=FORMAT, channels=1, rate=RATE,
         input=True, output=True,input_device_index = index,
-        frames_per_buffer=CHUNK_SIZE)
+        frames_per_buffer=CHUNK_SIZE) #start stream 
 
-    snd_started = False
+    snd_started = False     #variable to check if soundrecording started
 
-    r = array('h')
+    r = array('h')  #sound array
     print ("-------------------------------------------------------------")
     print ("Please start the music!", end="\r")
+#
     while 1:
 
         snd_data = array('h', stream.read(CHUNK_SIZE))
         if byteorder == 'big':
             snd_data.byteswap()
-        r.extend(snd_data)
+        r.extend(snd_data)      #add recorded sample to tone
 
-        silent = is_silent(snd_data)
+        silent = is_silent(snd_data)    #check if silent
 
         if snd_started:
             print("Still recording for " + str(round(REC_LENGTH-(time.time()-start_time),2)) + ' seconds...', end='\r')
         
-        if not silent and not snd_started:        #first detected tone
-            print('Music start detected.    ')
+        if not silent and not snd_started:        #first detected tone, start recordings
+            print('Music detected.      ')
             snd_started = True
             start_time = time.time()
 
@@ -134,6 +157,9 @@ def record(index):
     return sample_width, r
 
 def record_to_file(index):
+    '''
+    save recorded array to wav file
+    '''
     path = DIR_PATH + FILE_NAME
 
     sample_width, data = record(index)
@@ -150,7 +176,7 @@ def record_to_file(index):
 
 def waitForEnd(index):
     """
-    wait until song stopped
+    wait until to long silence, time to make robot dance
     """
     p = pyaudio.PyAudio()
 
@@ -176,10 +202,10 @@ def waitForEnd(index):
         else: 
             print("-- playing --                                                                  ", end="\r")
             silence = 0
-        if silence == 0.4*SILENCE_LEN:
+        if silence == 0.4*SILENCE_THRESHOLD:
             print("               Looks like music finished, robot will stop dancing in a moment..", end="\r")
                 
-        if silence>SILENCE_LEN:
+        if silence>SILENCE_THRESHOLD:
             print ("Song finished and robot sleeps! -> Make robot do nothing                              ")
             break
 
@@ -188,6 +214,7 @@ def waitForEnd(index):
     p.terminate()
 
 if __name__ == '__main__':
-    index = deviceInfo()
+    index = deviceInfo()    #select a device
     while 1:
-        record_to_file(index)
+        record_to_file(index)   #wait for music -> record small part -> <analyze & dance with robot> -> wait until silence 
+                                #       ^------------------------------------------------------------------| 
