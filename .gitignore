@@ -60,3 +60,12 @@ target/
 
 # do not upload the entire data set
 genres/
+
+# do not upload the extracted data
+*.csv
+
+# do not upload the audio fingerprinting
+audio-fingerprint-identifying-python/
+
+# do not upload the images
+img_data/
