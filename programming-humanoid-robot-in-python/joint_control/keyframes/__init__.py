@@ -6,7 +6,7 @@ from .leftBellyToStand import leftBellyToStand
 from .rightBackToStand import rightBackToStand
 from .rightBellyToStand import rightBellyToStand
 from .disco import disco
-from .roboDance import robotDance
+from .robotDance import robotDance
 from .classic import classic
 
 from .hello import hello

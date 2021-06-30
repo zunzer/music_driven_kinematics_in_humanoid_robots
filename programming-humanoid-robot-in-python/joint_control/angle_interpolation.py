@@ -20,7 +20,8 @@
 '''
 import numpy as np
 
-from keyframes import leftBackToStand, rightBackToStand, leftBellyToStand, hello, RoboDance
+from keyframes import leftBackToStand, rightBackToStand, leftBellyToStand, hello, disco, classic, robotDance
+from keyframes import disco
 from pid import PIDAgent
 import logging
 
@@ -97,5 +98,5 @@ class AngleInterpolationAgent(PIDAgent):
 
 if __name__ == '__main__':
     agent = AngleInterpolationAgent()
-    agent.keyframes = RoboDance()  # CHANGE DIFFERENT KEYFRAMES
+    agent.keyframes = classic()  # CHANGE DIFFERENT KEYFRAMES
     agent.run()
