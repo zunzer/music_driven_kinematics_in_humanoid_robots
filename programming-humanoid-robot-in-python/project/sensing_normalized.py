@@ -2,24 +2,21 @@
 Note: Due to the bad audio quality from microphones, we decided to use internal recorded sound. 
 
 WINDOWS: 
-    - In code set FILE_NAME = "\\recordings\\output_normalized.wav"
-
+    - dont use headphones 
     - pip install pipwin          
             #comment: pipwin = pip, but with optimized packets for windows 
     - pipwin install pyaudio  
-    [https://stackoverflow.com/questions/55936179/trying-to-install-pyaudio-using-pip] 
+        [https://stackoverflow.com/questions/55936179/trying-to-install-pyaudio-using-pip] 
 
     - Setup the stereomix device in windows like this:
-    [https://www.howtogeek.com/howto/39532/how-to-enable-stereo-mix-in-windows-7-to-record-audio/]
+        [https://www.howtogeek.com/howto/39532/how-to-enable-stereo-mix-in-windows-7-to-record-audio/]
 
-    - Select stereomix microphone as "Standardaufnahmegerät" and choose it at the beginning of the code 
+    - Select stereomix microphone as "Standardaufnahmegerät", run this code and choose Stereomix at the beginning
 
 LINUX: 
-    - In code set FILE_NAME = "/recordings/output_normalized.wav"
-
     - with conda/pip install portaudio and pyaudio
     - Install voice control using "sudo apt-get install pavucontrol" and run it by using "pavucontrol"
-        https://stackoverflow.com/questions/65079325/problem-with-alsa-in-speech-recognitionpython-3
+        [https://stackoverflow.com/questions/65079325/problem-with-alsa-in-speech-recognitionpython-3]
     
     - run this file in another terminal and select device "pulse" 
     
@@ -42,13 +39,14 @@ import wave
 import os
 import time
 
-FILE_NAME = "\\recordings\\output_normalized.wav"   #where to save recorded files 
+FILE_NAME = "output_normalized.wav"   #where to save recorded files 
 THRESHOLD = 300                                     #threshold how loud is silent
 CHUNK_SIZE = 1024
 FORMAT = pyaudio.paInt16
 RATE = 44100                                            #pyaudio specific variables
 DIR_PATH = os.path.dirname(os.path.realpath(__file__))
-REC_LENGTH = 10                                         #length of recorded files
+
+REC_LENGTH = 10                                          #length of recorded files
 SILENCE_THRESHOLD = 300                                  #duration until robot stops dancing if silence 
 
 def is_silent(snd_data):
@@ -139,7 +137,7 @@ def record(index):
             print("Still recording for " + str(round(REC_LENGTH-(time.time()-start_time),2)) + ' seconds...', end='\r')
         
         if not silent and not snd_started:        #first detected tone, start recordings
-            print('Music detected.      ')
+            print('Music detected.            ')
             snd_started = True
             start_time = time.time()
 
@@ -160,7 +158,7 @@ def record_to_file(index):
     '''
     save recorded array to wav file
     '''
-    path = DIR_PATH + FILE_NAME
+    path = os.path.join(DIR_PATH,"recordings",FILE_NAME)
 
     sample_width, data = record(index)
     data = pack('<' + ('h'*len(data)), *data)
@@ -203,7 +201,7 @@ def waitForEnd(index):
             print("-- playing --                                                                  ", end="\r")
             silence = 0
         if silence == 0.4*SILENCE_THRESHOLD:
-            print("               Looks like music finished, robot will stop dancing in a moment..", end="\r")
+            print("               Looks like music finished, robot will stop dancing in a moment", end="\r")
                 
         if silence>SILENCE_THRESHOLD:
             print ("Song finished and robot sleeps! -> Make robot do nothing                              ")
