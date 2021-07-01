@@ -6,9 +6,8 @@ import sys
 import numpy as np
 import pickle
 from thinking import extract_song_features
-#from keras.models import load_model
-#path = os.path.join(os.path.dirname(__file__), '../joint_control')
-#sys.path.insert(1,path)
+from sensing_normalized import deviceInfo, record_to_file
+from simple_sensing import record
 
 sys.path.append(os.path.join(os.path.abspath(os.path.dirname(__file__)), '..', 'joint_control'))
 
@@ -31,12 +30,16 @@ class DancingAgent(PostureRecognitionAgent):
             "pop": disco()
         }
 
+        # get the music device that we want to record from
+        self.index = deviceInfo()
+
         # load the classifier and compile it
         with open('../project/music_recognition/NN_classification/svm_model.pkl', 'rb') as f:
             self.music_classifier = pickle.load(f)
 
         # for now use a random file from the genres train data -- TODO: read the music from sensing in the future
-        self.recognized_flag = False
+        self.recognized = False
+        self.listened = False
         #self.music_data = extract_song_features("../project/recordings/output_normalized.wav") # TODO: we need 30s long recordings
         #self.music_data = extract_song_features("../project/music_recognition/NN_classification/genres/pop/pop.00000.wav") # TODO: we need 30s long recordings
 
@@ -47,15 +50,20 @@ class DancingAgent(PostureRecognitionAgent):
         This records 30s of music and returns it as music_ data
         TODO: @Severin, hier sollte dann ein Funktionsaufruf rein, der dein sensing_normalized aufruft oder so
         """
-        print("sensing")
-        music_data = extract_song_features("../project/music_recognition/NN_classification/genres/pop/pop.00000.wav")
+        if not self.listened:
+            print("sensing")
+            # TODO: do this in the background (only if we have something to do in the meantime)
+            #record_to_file(self.index)
+            record()
+        #music_data = extract_song_features("../project/recordings/output_normalized.wav")
+        music_data = extract_song_features("../project/recordings/output.wav")
         return music_data
 
     def think(self, perception):
         """
         get the file from sensing, predict genre from it and set keyframes
         """
-        if not self.recognized_flag:
+        if not self.recognized:
             self.music_data = self.listen()
             music_input = self.music_data[np.newaxis, :]
             prediction = self.music_classifier.predict(music_input)
@@ -65,7 +73,7 @@ class DancingAgent(PostureRecognitionAgent):
             # TODO: put this into separate act function
             keyframes = self.keyframes_dictionary[music_genre]
             self.dance(keyframes)
-            self.recognized_flag = True
+            self.recognized = True
 
         return super(DancingAgent, self).think(perception)
 
@@ -73,7 +81,7 @@ class DancingAgent(PostureRecognitionAgent):
         """
         This is our acting function. It sets new keyframes to animate if not done yet
         """
-        if self.recognized_flag:
+        if self.recognized:
             return
         self.keyframes = keyframes
 
