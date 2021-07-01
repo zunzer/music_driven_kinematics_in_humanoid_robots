@@ -7,7 +7,7 @@ from thinking import extract_song_features
 #from keras.models import load_model
 
 from joint_control.recognize_posture import PostureRecognitionAgent
-
+from keyframes import classic, disco, robotDance
 
 class DancingAgent(PostureRecognitionAgent):
     def __init__(self, simspark_ip='localhost',
@@ -39,8 +39,16 @@ class DancingAgent(PostureRecognitionAgent):
             prediction = self.music_classifier.predict(music_input)
             music_genre = self.genres[prediction[0]]
             print(f"recognized the following genre: {music_genre}!")
+
             # TODO: here we need a dictionary for the keyframes
-            # self.keyframes = frames[music_genre]
+            keyframes_dictionary = {
+                "classical": classic(),
+                "metal": robotDance(),
+                "pop": disco()
+            }
+
+            self.keyframes = keyframes_dictionary[music_genre]
+
             self.recognized_flag = True
         return super(DancingAgent, self).think(perception)
 
