@@ -170,7 +170,7 @@ def record_to_file(index):
     wf.writeframes(data)
     wf.close()
     print("Updated " +FILE_NAME+" -> Call dance thread now")
-    waitForEnd(index)
+    return 
 
 def waitForEnd(index):
     """
@@ -211,8 +211,8 @@ def waitForEnd(index):
     stream.close()
     p.terminate()
 
-if __name__ == '__main__':
-    index = deviceInfo()    #select a device
-    while 1:
-        record_to_file(index)   #wait for music -> record small part -> <analyze & dance with robot> -> wait until silence 
+#if __name__ == '__main__':
+#    index = deviceInfo()    #select a device
+#    while 1:
+#        record_to_file(index)   #wait for music -> record small part -> <analyze & dance with robot> -> wait until silence 
                                 #       ^------------------------------------------------------------------| 
