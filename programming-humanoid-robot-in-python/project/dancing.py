@@ -38,7 +38,8 @@ class DancingAgent(PostureRecognitionAgent):
             music_input = self.music_data[np.newaxis, :]
             prediction = self.music_classifier.predict(music_input)
             music_genre = self.genres[prediction[0]]
-            print(f"recognized the following genre: {music_genre}!")
+            #print(f"recognized the following genre: {music_genre}!")
+            print(music_genre)
 
             # TODO: here we need a dictionary for the keyframes
             keyframes_dictionary = {
@@ -55,5 +56,6 @@ class DancingAgent(PostureRecognitionAgent):
 
 
 if __name__ == '__main__':
+
     agent = DancingAgent()
     agent.run()
