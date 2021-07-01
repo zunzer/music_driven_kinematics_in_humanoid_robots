@@ -98,14 +98,14 @@ def deviceInfo():
     Shows available microphones and allows the user to select one
     '''
     audio = pyaudio.PyAudio()
-    print("----------------------record device list---------------------")
+    print("---------------------------record device list----------------------------")
     info = audio.get_host_api_info_by_index(0)
     numdevices = info.get('deviceCount')
     for i in range(0, numdevices):
         if (audio.get_device_info_by_host_api_device_index(0, i).get('maxInputChannels')) > 0:
             print("Input Device ", i, " - ", audio.get_device_info_by_host_api_device_index(0, i).get('name'))
-    print("-------------------------------------------------------------")
-    return int(input("Enter device number and press return: "))  #Note if input function is not working (e.g. in VSCode): Hardcode devicenumber here!
+    print("-------------------------------------------------------------------------")
+    return int(input("Select a microphone before starting! Enter device number and press return: "))  #Note if input function is not working (e.g. in VSCode): Hardcode devicenumber here!
 
 
 def record(index):
@@ -121,9 +121,9 @@ def record(index):
     snd_started = False     #variable to check if soundrecording started
 
     r = array('h')  #sound array
-    print ("-------------------------------------------------------------")
+    print("\n")    
     print ("Please start the music!", end="\r")
-#
+
     while 1:
 
         snd_data = array('h', stream.read(CHUNK_SIZE))
@@ -134,15 +134,15 @@ def record(index):
         silent = is_silent(snd_data)    #check if silent
 
         if snd_started:
-            print("Still recording for " + str(round(REC_LENGTH-(time.time()-start_time),2)) + ' seconds...', end='\r')
+            print("Still recording for " + str(abs(round(REC_LENGTH-(time.time()-start_time),2))) + ' seconds...', end='\r')
         
         if not silent and not snd_started:        #first detected tone, start recordings
-            print('Music detected.            ')
+            print("Music detected.                                          ")
             snd_started = True
             start_time = time.time()
 
         if snd_started and (time.time()-start_time)>REC_LENGTH:
-            print ("Finished recording.                              ")
+            print ("Finished recording. ", end ="")
             break
 
     sample_width = p.get_sample_size(FORMAT)
@@ -169,12 +169,12 @@ def record_to_file(index):
     wf.setframerate(RATE)
     wf.writeframes(data)
     wf.close()
-    print("Updated " +FILE_NAME+" -> Call dance thread now")
+    print("Updated " +FILE_NAME + "       ")
     return 
 
 def waitForEnd(index):
     """
-    wait until to long silence, time to make robot dance
+    wait until to long silence while the robot dances 
     """
     p = pyaudio.PyAudio()
 
@@ -183,7 +183,7 @@ def waitForEnd(index):
         frames_per_buffer=CHUNK_SIZE)
 
     silence = 0
-    print("Robot should dance to current song :D")
+    print("Robot is dancing to current song :D -- stop music to stop robot ")
     
     r = array('h')
     while 1:
@@ -195,21 +195,23 @@ def waitForEnd(index):
         silent = is_silent(snd_data)
 
         if silent:
-            print("--         --", end="\r")
+            print("--     --", end="\r")
             silence += 1
         else: 
-            print("-- playing --                                                                  ", end="\r")
+            print('--  ' + '\x1b[6;30;42m' + 'ON' + '\x1b[0m' + '  --', end ="")
+            print("                                                                            ", end="\r")
             silence = 0
         if silence == 0.4*SILENCE_THRESHOLD:
-            print("               Looks like music finished, robot will stop dancing in a moment", end="\r")
+            print("           Looks like music finished, robot will stop dancing in a few seconds", end="\r")
                 
         if silence>SILENCE_THRESHOLD:
-            print ("Song finished and robot sleeps! -> Make robot do nothing                              ")
+            print ("Song finished and robot sleeps!                                                         ")
             break
 
     stream.stop_stream()
     stream.close()
     p.terminate()
+    return 
 
 #if __name__ == '__main__':
 #    index = deviceInfo()    #select a device
