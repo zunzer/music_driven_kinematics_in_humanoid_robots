@@ -46,7 +46,7 @@ FORMAT = pyaudio.paInt16
 RATE = 44100                                            #pyaudio specific variables
 DIR_PATH = os.path.dirname(os.path.realpath(__file__))
 
-REC_LENGTH = 10                                          #length of recorded files
+REC_LENGTH = 30                                          #length of recorded files
 SILENCE_THRESHOLD = 300                                  #duration until robot stops dancing if silence 
 
 def is_silent(snd_data):

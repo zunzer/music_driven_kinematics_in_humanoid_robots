@@ -11,8 +11,8 @@
 
 import numpy as np
 from os import listdir, path
-from joint_control.angle_interpolation import AngleInterpolationAgent
-from joint_control.keyframes import wipe_forehead, hello
+from angle_interpolation import AngleInterpolationAgent
+from keyframes import wipe_forehead, hello
 import pickle
 
 class PostureRecognitionAgent(AngleInterpolationAgent):
