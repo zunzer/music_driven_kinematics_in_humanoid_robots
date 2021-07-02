@@ -29,7 +29,8 @@ class DancingAgent(PostureRecognitionAgent):
         self.keyframes_dictionary = {
             "classical": classic(),
             "metal": robotDance(),
-            "pop": disco()
+            "pop": disco(),
+            "default": stand()
         }
 
         # get the music device that we want to record from
@@ -107,12 +108,15 @@ class DancingAgent(PostureRecognitionAgent):
                 print('\x1b[1;30;40m' + 'song stopped, thread closed' + '\x1b[0m')
                 self.WaitingThreadAlive = False
                 self.recorded = False  
-                self.recognized = False
 
                 # TODO: make robot stop dancing HERE
                 self.songStopped = True 
 
-                self.keyframes = stand() # robot goes in default standing position
+                keyframes = self.keyframes_dictionary["default"]
+                self.dance(keyframes)# robot goes in default standing position
+
+                self.recognized = False
+
                 
         return super(DancingAgent, self).think(perception)
 
