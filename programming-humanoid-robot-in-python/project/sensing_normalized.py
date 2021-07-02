@@ -165,7 +165,8 @@ def load_to_file():
     arr = os.listdir(os.path.join(DIR_PATH,"sounds"))
     for i in range(len(arr)):
         if ".wav" in arr[i]: 
-            print("    " + str(i)+": "+arr[i])
+            print("    |--- " + str(i)+": "+arr[i])
+    print("")
     selected = int(input("Enter a number: "))
     if ".wav" in arr[selected]: 
         src = os.path.join(DIR_PATH,"sounds",arr[selected])
@@ -221,10 +222,10 @@ def waitForEnd(index):
             silence += 1
         else: 
             print('--  ' + '\x1b[6;30;42m' + 'ON' + '\x1b[0m' + '  --', end ="")
-            print("                                                                            ", end="\r")
+            print("                                                                   ", end="\r")
             silence = 0
         if silence == 0.4*SILENCE_THRESHOLD:
-            print("           Looks like music finished, robot will stop dancing in a few seconds", end="\r")
+            print("           Music stopped, robot will stop dancing in a few seconds", end="\r")
                 
         if silence>SILENCE_THRESHOLD:
             print ("Song finished and robot sleeps!                                                         ")

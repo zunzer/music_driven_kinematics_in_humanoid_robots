@@ -47,10 +47,9 @@ class DancingAgent(PostureRecognitionAgent):
         self.RecordingThreadAlive = False    #variable if we are currently listening
         self.WaitingThreadAlive = False    #variable if we are currently listening
         self.thread = None          #variable to store a running thread
-        self.songStopped = False 
-        self.selected_input = 0
-        self.always_record = False
-        self.always_load = False
+        self.selected_input = 0         #variable for input type: 1 = record music/ 2 = load music 
+        self.always_record = False      #variable if we only want to record music
+        self.always_load = False        #variable if we only want to load files
         #self.music_data = extract_song_features("../project/recordings/output_normalized.wav") # TODO: we need 30s long recordings
         #self.music_data = extract_song_features("../project/music_recognition/NN_classification/genres/pop/pop.00000.wav") # TODO: we need 30s long recordings
         print("")
@@ -59,15 +58,15 @@ class DancingAgent(PostureRecognitionAgent):
     
     def setup_sensing_thread(self, index):
         ''' 
-        lets user choos between different input options 
+        lets user choose between different input options 
         '''
-        if not self.always_record or self.always_load:
-            print("------------------------------------- Select input ----------------------------------------")
+        if not self.always_record and not self.always_load:
+            print("------------------------------ Select Input ------------------------------")
             print("   1: Record song live with selected microphone.")
-            print("   2: Load prerecorded song from storage.")
+            print("   2: Load already recorded song from storage.")
             print("   3: Always use option 1. ")
             print("   4: Always use option 2. ")
-            print("--------------------------------------------------------------------------------------------")
+            print("-------------------------------------------------------------------------")
             self.selected_input = int(input("Enter a number: "))
             if self.selected_input == 1:    #only record
                 record_to_file(index)
@@ -135,6 +134,7 @@ class DancingAgent(PostureRecognitionAgent):
                     print(f"Recognized the following genre: {music_genre}!")
                 except: 
                     print('\x1b[3;30;41m' + 'ERROR:' + '\x1b[0m' + '  Song was paused, overmodulated or recording is to short. Please try again!')
+                    print("") 
                     self.recorded = False
                     return super(DancingAgent, self).think(perception)
                
@@ -154,9 +154,10 @@ class DancingAgent(PostureRecognitionAgent):
             if not self.thread.is_alive():      #check if waiting thread finished 
                 self.WaitingThreadAlive = False
                 self.recorded = False  
+                print('\x1b[0;30;47m' + 'Stopped Dancing!' + '\x1b[0m')
+                print("")
 
                 # TODO: make robot stop dancing HERE
-                self.songStopped = True 
                 self.start_time = -1
                 self.keyframes = ([], [], [])
                 self.working = False
