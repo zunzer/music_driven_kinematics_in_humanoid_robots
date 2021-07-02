@@ -88,7 +88,7 @@ class DancingAgent(PostureRecognitionAgent):
                     music_genre = self.genres[prediction[0]]
                     print(f"Recognized the following genre: {music_genre}!")
                 except: 
-                    print('\x1b[3;30;41m' + 'ERROR:' + '\x1b[0m' + '  Song was paused or recording is to short. Please try again!')
+                    print('\x1b[3;30;41m' + 'ERROR:' + '\x1b[0m' + '  Song was paused, overmodulated or recording is to short. Please try again!')
                     self.recorded = False
                     return super(DancingAgent, self).think(perception)
                
@@ -111,10 +111,12 @@ class DancingAgent(PostureRecognitionAgent):
 
                 # TODO: make robot stop dancing HERE
                 self.songStopped = True 
-
+                self.start_time = -1
+                self.keyframes = ([], [], [])
+                self.working = False
+                
                 keyframes = self.keyframes_dictionary["default"]
                 self.dance(keyframes)# robot goes in default standing position
-
                 self.recognized = False
 
                 
