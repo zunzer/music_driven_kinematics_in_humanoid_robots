@@ -14,7 +14,7 @@ import warnings
 warnings.filterwarnings("ignore", category=np.VisibleDeprecationWarning) 
 
 from recognize_posture import PostureRecognitionAgent   #replaced joint_control. 
-from dance_keyframes import classic, disco, robotDance
+from dance_keyframes import classic, disco, robotDance, stand
 
 class DancingAgent(PostureRecognitionAgent):
     def __init__(self, simspark_ip='localhost',
@@ -109,7 +109,8 @@ class DancingAgent(PostureRecognitionAgent):
                 self.recorded = False  
                 self.recognized = False
 
-                # TODO: make robot stop dancing HERE 
+                # TODO: make robot stop dancing HERE
+                self.songStopped = True 
 
                 self.keyframes = stand() # robot goes in default standing position
                 
