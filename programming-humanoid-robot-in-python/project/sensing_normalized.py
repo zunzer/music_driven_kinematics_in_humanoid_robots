@@ -38,6 +38,7 @@ import pyaudio
 import wave
 import os
 import time
+import shutil
 
 FILE_NAME = "output_normalized.wav"   #where to save recorded files 
 THRESHOLD = 300                                     #threshold how loud is silent
@@ -93,21 +94,6 @@ def trim(snd_data):
     snd_data.reverse()
     return snd_data
 
-def deviceInfo():
-    '''
-    Shows available microphones and allows the user to select one
-    '''
-    audio = pyaudio.PyAudio()
-    print("---------------------------record device list----------------------------")
-    info = audio.get_host_api_info_by_index(0)
-    numdevices = info.get('deviceCount')
-    for i in range(0, numdevices):
-        if (audio.get_device_info_by_host_api_device_index(0, i).get('maxInputChannels')) > 0:
-            print("Input Device ", i, " - ", audio.get_device_info_by_host_api_device_index(0, i).get('name'))
-    print("-------------------------------------------------------------------------")
-    return int(input("Select a microphone before starting! Enter device number and press return: "))  #Note if input function is not working (e.g. in VSCode): Hardcode devicenumber here!
-
-
 def record(index):
     """
     Record music from the selected microphone for selected time
@@ -154,9 +140,45 @@ def record(index):
     r = trim(r)
     return sample_width, r
 
+def deviceInfo():
+    '''
+    Shows available microphones and allows the user to select one
+    '''
+    audio = pyaudio.PyAudio()
+    print("---------------------------record device list----------------------------")
+    info = audio.get_host_api_info_by_index(0)
+    numdevices = info.get('deviceCount')
+    for i in range(0, numdevices):
+        if (audio.get_device_info_by_host_api_device_index(0, i).get('maxInputChannels')) > 0:
+            print("Input Device ", i, " - ", audio.get_device_info_by_host_api_device_index(0, i).get('name'))
+    print("-------------------------------------------------------------------------")
+    return int(input("Select a microphone before starting! Enter device number and press return: "))  #Note if input function is not working (e.g. in VSCode): Hardcode devicenumber here!
+
+
+
+def load_to_file():
+    '''
+    Loads a file into music processing directory 
+    '''
+    print("")
+    print("Select a file from sound directory:")
+    arr = os.listdir(os.path.join(DIR_PATH,"sounds"))
+    for i in range(len(arr)):
+        if ".wav" in arr[i]: 
+            print("    " + str(i)+": "+arr[i])
+    selected = int(input("Enter a number: "))
+    if ".wav" in arr[selected]: 
+        src = os.path.join(DIR_PATH,"sounds",arr[selected])
+        dst = os.path.join(DIR_PATH,"recordings",FILE_NAME)
+        shutil.copyfile(src,dst) 
+    else: 
+        print('\x1b[3;30;41m' + 'Not a .wav file or error occured with selected file' + '\x1b[0m')
+        load_to_file()
+    return 
+
 def record_to_file(index):
     '''
-    save recorded array to wav file
+    Records from microphone into music processing directory 
     '''
     path = os.path.join(DIR_PATH,"recordings",FILE_NAME)
 
@@ -212,9 +234,3 @@ def waitForEnd(index):
     stream.close()
     p.terminate()
     return 
-
-#if __name__ == '__main__':
-#    index = deviceInfo()    #select a device
-#    while 1:
-#        record_to_file(index)   #wait for music -> record small part -> <analyze & dance with robot> -> wait until silence 
-                                #       ^------------------------------------------------------------------| 
