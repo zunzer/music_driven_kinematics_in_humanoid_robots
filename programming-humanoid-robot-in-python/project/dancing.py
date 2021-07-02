@@ -110,6 +110,8 @@ class DancingAgent(PostureRecognitionAgent):
                 self.recognized = False
 
                 # TODO: make robot stop dancing HERE 
+
+                self.keyframes = stand() # robot goes in default standing position
                 
         return super(DancingAgent, self).think(perception)
 
