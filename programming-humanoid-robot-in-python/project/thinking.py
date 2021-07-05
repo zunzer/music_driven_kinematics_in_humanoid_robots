@@ -14,6 +14,8 @@ def extract_song_features(file):
     """
     #y, _ = librosa.load(file)
     y, sr = compress_filter(file)
+
+    # get Mel-frequency cepstral coefficients and normalize
     mfcc = librosa.feature.mfcc(y)
     mfcc /= np.amax(np.absolute(mfcc))
     return np.ndarray.flatten(mfcc)[:25000]

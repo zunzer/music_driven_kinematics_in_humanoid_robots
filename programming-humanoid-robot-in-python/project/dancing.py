@@ -41,7 +41,6 @@ class DancingAgent(PostureRecognitionAgent):
         with open('../project/music_recognition/NN_classification/svm_model.pkl', 'rb') as f:
             self.music_classifier = pickle.load(f)
 
-
         self.recognized = False     #variable if we already recognized a song 
         self.recorded = False       #variable if we already recorded a song  
         self.RecordingThreadAlive = False    #variable if we are currently listening
