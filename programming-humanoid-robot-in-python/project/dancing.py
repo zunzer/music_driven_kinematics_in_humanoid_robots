@@ -16,7 +16,7 @@ sys.path.append(os.path.join(os.path.abspath(os.path.dirname(__file__)), '..', '
 warnings.filterwarnings("ignore", category=np.VisibleDeprecationWarning)
 
 from recognize_posture import PostureRecognitionAgent  # replaced joint_control.
-from dance_keyframes import classic, disco, robotDance, stand
+from dance_keyframes import classic, disco, robotDance, stand, verbeugung, denkerpose
 
 
 class DancingAgent(PostureRecognitionAgent):
@@ -33,7 +33,7 @@ class DancingAgent(PostureRecognitionAgent):
             "classical": classic(),
             "metal": robotDance(),
             "pop": disco(),
-            "default": stand()
+            "default": verbeugung()
         }
 
         # get the music device that we want to record from
@@ -107,7 +107,10 @@ class DancingAgent(PostureRecognitionAgent):
         """
         This records 30s of music and returns it as music_ data
         """
+
         if not self.recorded and not self.RecordingThreadAlive:  # nothing was recorded yet and thread is not running
+            self.keyframes = denkerpose() # put robot into denkerpose
+
             self.thread = threading.Thread(target=self.setup_sensing_thread, args=(self.index,))
             self.thread.daemon = True
             self.thread.start()
@@ -140,6 +143,9 @@ class DancingAgent(PostureRecognitionAgent):
                     print("")
                     self.recorded = False
                     return super(DancingAgent, self).think(perception)
+
+                self.start_time = -1 # makes robot stop the denkerpose and stops keyframes
+                self.keyframes = ([], [], [])  
 
                 keyframes = self.keyframes_dictionary[self.music_genre]
                 print("")
