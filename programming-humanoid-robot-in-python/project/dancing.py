@@ -130,10 +130,6 @@ class DancingAgent(PostureRecognitionAgent):
             if self.recorded:  # a recorded song exists
                 print("")
                 print("Detected a new recorded song, start analyzing...")  # start song processing
-
-                keyframes = denkerpose() # for processing robot goes into denkerpose
-                self.dance(keyframes)
-                
                 try:
                     music_input = self.music_data[np.newaxis, :]  # try analyzing, throw error if it fails and start again
                     prediction = self.music_classifier.predict(music_input)
@@ -145,9 +141,6 @@ class DancingAgent(PostureRecognitionAgent):
                     print("")
                     self.recorded = False
                     return super(DancingAgent, self).think(perception)
-
-                self.start_time = -1 # makes robot stop the denkerpose and stops keyframes
-                self.keyframes = ([], [], [])  
 
                 keyframes = self.keyframes_dictionary[self.music_genre]
                 print("")
@@ -179,7 +172,8 @@ class DancingAgent(PostureRecognitionAgent):
                 self.keyframes = ([], [], [])
                 self.working = False
 
-                self.dance(verbeugung()) # robot bows
+                keyframes = verbeugung()
+                self.dance(keyframes) # robot bows
 
                 keyframes = self.keyframes_dictionary["default"]
                 self.dance(keyframes)  # robot goes in default standing position
