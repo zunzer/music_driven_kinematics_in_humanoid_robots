@@ -40,44 +40,63 @@ import os
 import time
 import shutil
 
-FILE_NAME = "output_normalized.wav"   #where to save recorded files 
-THRESHOLD = 300                                     #threshold how loud is silent
+FILE_NAME = "output_normalized.wav"  # where to save recorded files
+THRESHOLD = 300  # threshold how loud is silent
 CHUNK_SIZE = 1024
 FORMAT = pyaudio.paInt16
-RATE = 44100                                            #pyaudio specific variables
+RATE = 44100  # pyaudio specific variables
 DIR_PATH = os.path.dirname(os.path.realpath(__file__))
 
-REC_LENGTH = 35                                          #length of recorded files
-SILENCE_THRESHOLD = 300                                  #duration until robot stops dancing if silence 
+REC_LENGTH = 35  # length of recorded files
+SILENCE_THRESHOLD = 300  # duration until robot stops dancing if silence
+
+
+def check_input(input_string, valid_inputs):
+    """
+    checks the input for type and value
+    """
+    selected = input(input_string)
+    while True:
+        try:
+            selected = int(selected)
+            if selected not in valid_inputs:
+                raise ValueError
+            return selected
+        except ValueError:
+            selected = input("Please enter a valid number: ")
+
 
 def is_silent(snd_data):
-    '''
+    """
     Returns 'True' if below the 'silent' threshold
-    '''
+    """
     return max(snd_data) < THRESHOLD
 
+
 def normalize(snd_data):
-    '''
+    """
     Average the volume out
-    '''
+    """
     MAXIMUM = 16384
-    times = float(MAXIMUM)/max(abs(i) for i in snd_data)
+    times = float(MAXIMUM) / max(abs(i) for i in snd_data)
 
     r = array('h')
     for i in snd_data:
-        r.append(int(i*times))
+        r.append(int(i * times))
     return r
 
+
 def trim(snd_data):
-    '''
+    """
     Trim the blank spots at the start and end
-    '''
+    """
+
     def _trim(snd_data):
         snd_started = False
         r = array('h')
 
         for i in snd_data:
-            if not snd_started and abs(i)>THRESHOLD:
+            if not snd_started and abs(i) > THRESHOLD:
                 snd_started = True
                 r.append(i)
 
@@ -94,6 +113,7 @@ def trim(snd_data):
     snd_data.reverse()
     return snd_data
 
+
 def record(index):
     """
     Record music from the selected microphone for selected time
@@ -101,34 +121,35 @@ def record(index):
     p = pyaudio.PyAudio()
 
     stream = p.open(format=FORMAT, channels=1, rate=RATE,
-        input=True, output=True,input_device_index = index,
-        frames_per_buffer=CHUNK_SIZE) #start stream 
+                    input=True, output=True, input_device_index=index,
+                    frames_per_buffer=CHUNK_SIZE)  # start stream
 
-    snd_started = False     #variable to check if soundrecording started
+    snd_started = False  # variable to check if soundrecording started
 
-    r = array('h')  #sound array
-    print("\n")    
-    print ("Please start the music!", end="\r")
+    r = array('h')  # sound array
+    print("\n")
+    print("Please start the music!", end="\r")
 
     while 1:
 
         snd_data = array('h', stream.read(CHUNK_SIZE))
         if byteorder == 'big':
             snd_data.byteswap()
-        r.extend(snd_data)      #add recorded sample to tone
+        r.extend(snd_data)  # add recorded sample to tone
 
-        silent = is_silent(snd_data)    #check if silent
+        silent = is_silent(snd_data)  # check if silent
 
         if snd_started:
-            print("Still recording for " + str(abs(round(REC_LENGTH-(time.time()-start_time),2))) + ' seconds...', end='\r')
-        
-        if not silent and not snd_started:        #first detected tone, start recordings
+            print("Still recording for " + str(abs(round(REC_LENGTH - (time.time() - start_time), 2))) + ' seconds...',
+                  end='\r')
+
+        if not silent and not snd_started:  # first detected tone, start recordings
             print("Music detected.                                          ")
             snd_started = True
             start_time = time.time()
 
-        if snd_started and (time.time()-start_time)>REC_LENGTH:
-            print ("Finished recording. ", end ="")
+        if snd_started and (time.time() - start_time) > REC_LENGTH:
+            print("Finished recording. ", end="")
             break
 
     sample_width = p.get_sample_size(FORMAT)
@@ -140,51 +161,58 @@ def record(index):
     r = trim(r)
     return sample_width, r
 
+
 def deviceInfo():
-    '''
+    """
     Shows available microphones and allows the user to select one
-    '''
+    """
     audio = pyaudio.PyAudio()
     print("---------------------------record device list----------------------------")
     info = audio.get_host_api_info_by_index(0)
-    numdevices = info.get('deviceCount')
-    for i in range(0, numdevices):
+    # numDevices = info.get('deviceCount')
+    device_nums = []
+    for i in range(info.get('deviceCount')):
         if (audio.get_device_info_by_host_api_device_index(0, i).get('maxInputChannels')) > 0:
             print("Input Device ", i, " - ", audio.get_device_info_by_host_api_device_index(0, i).get('name'))
+            device_nums.append(i)
     print("-------------------------------------------------------------------------")
-    return int(input("Select a microphone before starting! Enter device number and press return: "))  #Note if input function is not working (e.g. in VSCode): Hardcode devicenumber here!
-
+    selected = check_input("Select a microphone before starting! Enter device number and press return: ", device_nums)
+    return selected  # Note if input function is not working (e.g. in VSCode): Hardcode devicenumber here!
 
 
 def load_to_file():
-    '''
-    Loads a file into music processing directory 
-    '''
+    """
+    Loads a file into music processing directory
+    """
     print("")
     print("Select a file from sound directory:")
-    arr = os.listdir(os.path.join(DIR_PATH,"sounds"))
+    arr = os.listdir(os.path.join(DIR_PATH, "sounds"))
     for i in range(len(arr)):
-        if ".wav" in arr[i]: 
-            print("    |--- " + str(i)+": "+arr[i])
+        if ".wav" in arr[i]:
+            print("    |--- " + str(i) + ": " + arr[i])
     print("")
-    selected = int(input("Enter a number: "))
-    if ".wav" in arr[selected]: 
-        src = os.path.join(DIR_PATH,"sounds",arr[selected])
-        dst = os.path.join(DIR_PATH,"recordings",FILE_NAME)
-        shutil.copyfile(src,dst) 
-    else: 
+
+    # check that input is valid
+    selected = check_input("Enter a number: ", range(len(arr)))
+
+    if ".wav" in arr[selected]:
+        src = os.path.join(DIR_PATH, "sounds", arr[selected])
+        dst = os.path.join(DIR_PATH, "recordings", FILE_NAME)
+        shutil.copyfile(src, dst)
+    else:
         print('\x1b[3;30;41m' + 'Not a .wav file or error occured with selected file' + '\x1b[0m')
         load_to_file()
-    return 
+    return
+
 
 def record_to_file(index):
-    '''
-    Records from microphone into music processing directory 
-    '''
-    path = os.path.join(DIR_PATH,"recordings",FILE_NAME)
+    """
+    Records from microphone into music processing directory
+    """
+    path = os.path.join(DIR_PATH, "recordings", FILE_NAME)
 
     sample_width, data = record(index)
-    data = pack('<' + ('h'*len(data)), *data)
+    data = pack('<' + ('h' * len(data)), *data)
 
     wf = wave.open(path, 'wb')
     wf.setnchannels(1)
@@ -192,8 +220,9 @@ def record_to_file(index):
     wf.setframerate(RATE)
     wf.writeframes(data)
     wf.close()
-    print("Updated " +FILE_NAME + "       ")
-    return 
+    print("Updated " + FILE_NAME + "       ")
+    return
+
 
 def waitForEnd(index):
     """
@@ -202,12 +231,12 @@ def waitForEnd(index):
     p = pyaudio.PyAudio()
 
     stream = p.open(format=FORMAT, channels=1, rate=RATE,
-        input=True, output=True,input_device_index = index,
-        frames_per_buffer=CHUNK_SIZE)
+                    input=True, output=True, input_device_index=index,
+                    frames_per_buffer=CHUNK_SIZE)
 
     silence = 0
     print("Robot is dancing to current song :D -- stop music to stop robot ")
-    
+
     r = array('h')
     while 1:
         snd_data = array('h', stream.read(CHUNK_SIZE))
@@ -220,18 +249,18 @@ def waitForEnd(index):
         if silent:
             print("--     --", end="\r")
             silence += 1
-        else: 
-            print('--  ' + '\x1b[6;30;42m' + 'ON' + '\x1b[0m' + '  --', end ="")
+        else:
+            print('--  ' + '\x1b[6;30;42m' + 'ON' + '\x1b[0m' + '  --', end="")
             print("                                                                   ", end="\r")
             silence = 0
-        if silence == 0.4*SILENCE_THRESHOLD:
+        if silence == 0.4 * SILENCE_THRESHOLD:
             print("           Music stopped, robot will stop dancing in a few seconds", end="\r")
-                
-        if silence>SILENCE_THRESHOLD:
-            print ("Song finished and robot sleeps!                                                         ")
+
+        if silence > SILENCE_THRESHOLD:
+            print("Song finished and robot sleeps!                                                         ")
             break
 
     stream.stop_stream()
     stream.close()
     p.terminate()
-    return 
+    return

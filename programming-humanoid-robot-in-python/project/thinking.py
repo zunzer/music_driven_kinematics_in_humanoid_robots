@@ -1,10 +1,15 @@
 import librosa
 import numpy as np
 
+
 def compress_filter(file):
+    """
+    compress the signal
+    """
     y, sr = librosa.load(file)
     x = librosa.mu_compress(y, quantize=False)
     return x, sr
+
 
 def extract_song_features(file):
     """
@@ -12,7 +17,7 @@ def extract_song_features(file):
     this is the same as in the notebook,
     maybe we can solve this a bit more elegantly than implementing it twice at one point
     """
-    #y, _ = librosa.load(file)
+    # y, _ = librosa.load(file)
     y, sr = compress_filter(file)
 
     # get Mel-frequency cepstral coefficients and normalize
