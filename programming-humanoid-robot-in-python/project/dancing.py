@@ -33,7 +33,7 @@ class DancingAgent(PostureRecognitionAgent):
             "classical": classic(),
             "metal": robotDance(),
             "pop": disco(),
-            "default": verbeugung()
+            "default": stand()
         }
 
         # get the music device that we want to record from
@@ -109,8 +109,6 @@ class DancingAgent(PostureRecognitionAgent):
         """
 
         if not self.recorded and not self.RecordingThreadAlive:  # nothing was recorded yet and thread is not running
-            self.keyframes = denkerpose() # put robot into denkerpose
-
             self.thread = threading.Thread(target=self.setup_sensing_thread, args=(self.index,))
             self.thread.daemon = True
             self.thread.start()
@@ -132,6 +130,10 @@ class DancingAgent(PostureRecognitionAgent):
             if self.recorded:  # a recorded song exists
                 print("")
                 print("Detected a new recorded song, start analyzing...")  # start song processing
+
+                keyframes = denkerpose() # for processing robot goes into denkerpose
+                self.dance(keyframes)
+                
                 try:
                     music_input = self.music_data[np.newaxis, :]  # try analyzing, throw error if it fails and start again
                     prediction = self.music_classifier.predict(music_input)
@@ -176,6 +178,8 @@ class DancingAgent(PostureRecognitionAgent):
                 self.start_time = -1
                 self.keyframes = ([], [], [])
                 self.working = False
+
+                self.dance(verbeugung()) # robot bows
 
                 keyframes = self.keyframes_dictionary["default"]
                 self.dance(keyframes)  # robot goes in default standing position
