@@ -62,11 +62,13 @@ class DancingAgent(PostureRecognitionAgent):
         """
         if not self.always_record and not self.always_load:
 
-            print("Going into denkerpose...")
-            self.dance(denkerpose())
-            self.start_time = -1
+            # Denkerpose not working properly
+            #print("Going into denkerpose...")
             #self.keyframes = ([], [], [])
+            #self.dance(denkerpose())
+            #self.start_time = -1
 
+            
             correct_inputs = [1, 2, 3, 4]
             print("------------------------------ Select Input ------------------------------")
             print("   1: Record song live with selected microphone.")
