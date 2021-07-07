@@ -33,7 +33,7 @@ class DancingAgent(PostureRecognitionAgent):
             "classical": classic(),
             "metal": robotDance(),
             "pop": disco(),
-            "default": stand()
+            "default": verbeugung()
         }
 
         # get the music device that we want to record from
@@ -172,12 +172,9 @@ class DancingAgent(PostureRecognitionAgent):
                 self.keyframes = ([], [], [])
                 self.working = False
 
-                keyframes = verbeugung()
-                self.dance(keyframes) # robot bows
-
-                keyframes = self.keyframes_dictionary["default"]
-                self.dance(keyframes)  # robot goes in default standing position
                 self.recognized = False
+                keyframes = self.keyframes_dictionary["default"]
+                self.dance(keyframes)  # robot goes in default bow and stand position
                 self.music_genre = "unknown"
 
         return super(DancingAgent, self).think(perception)
