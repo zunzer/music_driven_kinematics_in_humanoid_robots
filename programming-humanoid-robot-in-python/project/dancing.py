@@ -61,6 +61,12 @@ class DancingAgent(PostureRecognitionAgent):
         lets user choose between different input options
         """
         if not self.always_record and not self.always_load:
+
+            print("Going into denkerpose...")
+            self.dance(denkerpose())
+            self.start_time = -1
+            #self.keyframes = ([], [], [])
+
             correct_inputs = [1, 2, 3, 4]
             print("------------------------------ Select Input ------------------------------")
             print("   1: Record song live with selected microphone.")
