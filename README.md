@@ -9,7 +9,12 @@
 ![grafik](https://user-images.githubusercontent.com/64356366/122386702-6c952d00-cf6e-11eb-851c-c7b550f97f2c.png)
 Visualization  of the interfaces between the certain components.
 
-To edit the chart: import the flowchart.drawio file on https://app.diagrams.net/, change it, export it as png and don't forget to save changes and reupload the updated .drawio file to github.   
+To edit the chart: import the flowchart.drawio file on https://app.diagrams.net/, change it, export it as png and don't forget to save changes and reupload the updated .drawio file to github.
+
+### Chosen genres:
+- pop/disco
+- classic
+- metal/rock
 
 ## 1.) Sensing
 ### Record and save the music (with microphone played by external device or use internal stereomix microphone) (Seraphin)
@@ -26,17 +31,15 @@ TODO:
 ## 3.) Acting
 ### Generate dance moves/keyframes (Emi) 
 Take a look at: https://www.youtube.com/watch?v=ikNX8A-3P98
-- Only generate single movements we can combine? 
-- Implement full dances, choose one based on music?
-
-TODO:
-- [X] Installing software
-- [ ] Generate keyframes for each genre
+- [X] Implement full dances, choose one based on music?
+- [X] Installing software Choregraphe
+- [X] Generate keyframes for each genre
 
 ## General TODO:
 - [x] Determine which genres we want to detect
-- [ ] Determine the length of the music and the corresponding dace.
-- [ ] Write the full loop 
+- [X] Determine the length of the music and the corresponding dace. (= solved by looping dance and stopping dance when music staps)
+- [X] Write the full loop 
+- [X] Optional: Stop dancing if we stop music
 - [ ] Optional: Change speed of keyframes based on music 
-- [ ] Optional: Stop dancing if we stop music
+
    
