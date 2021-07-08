@@ -20,13 +20,12 @@ To edit the chart: import the flowchart.drawio file on https://app.diagrams.net/
 ### Record and save the music (with microphone played by external device or use internal stereomix microphone) (Seraphin)
 TODO:
 - [X] Record music over microphone and stereomix 
-- [ ] Clean and normalize audio, so that the genre classification works
+- [X] Clean and normalize audio, so that the genre classification works (depends on mic quality. Added file loading option)
 
 ## 2.) Thinking
 ### Process music and choose corresponding genre and dance/keyframes (Cornelius)
 TODO:
 - [x] Be able to recognize music from file. To do so, either filter training data or change the NN.
-- [ ] Optional: Calculate bpm
 
 ## 3.) Acting
 ### Generate dance moves/keyframes (Emi) 
@@ -40,6 +39,5 @@ Take a look at: https://www.youtube.com/watch?v=ikNX8A-3P98
 - [X] Determine the length of the music and the corresponding dace. (= solved by looping dance and stopping dance when music staps)
 - [X] Write the full loop 
 - [X] Optional: Stop dancing if we stop music
-- [ ] Optional: Change speed of keyframes based on music 
 
    
