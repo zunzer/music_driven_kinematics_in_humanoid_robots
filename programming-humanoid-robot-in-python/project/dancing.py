@@ -40,7 +40,7 @@ class DancingAgent(PostureRecognitionAgent):
         self.index = deviceInfo()
 
         # load the classifier and compile it
-        with open('../project/music_recognition/NN_classification/svm_model.pkl', 'rb') as f:
+        with open('../project/music_recognition/svm_model.pkl', 'rb') as f:
             self.music_classifier = pickle.load(f)
 
         self.recognized = False  # variable if we already recognized a song
