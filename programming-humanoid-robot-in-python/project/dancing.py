@@ -1,5 +1,5 @@
 """
-The whole thing
+The whole project
 """
 import os
 import sys
@@ -8,12 +8,13 @@ import pickle
 import threading
 import warnings
 
-from thinking import extract_song_features
+from thinking import extract_song_features      
 from sensing_normalized import deviceInfo, record_to_file, waitForEnd, load_to_file, check_input
 
 sys.path.append(os.path.join(os.path.abspath(os.path.dirname(__file__)), '..', 'joint_control'))
 
-warnings.filterwarnings("ignore", category=np.VisibleDeprecationWarning)
+warnings.filterwarnings("ignore", category=np.VisibleDeprecationWarning)  #ignore deprecaition warning
+warnings.filterwarnings("ignore", category=UserWarning)  #ignore Userwarning warning
 
 from recognize_posture import PostureRecognitionAgent  # replaced joint_control.
 from dance_keyframes import classic, disco, robotDance, stand, verbeugung, denkerpose
@@ -58,7 +59,8 @@ class DancingAgent(PostureRecognitionAgent):
 
     def setup_sensing_thread(self, index):
         """
-        lets user choose between different input options
+        lets user choose between different music input options
+        mainly developed to test robots genre recognition without recording songs every time
         """
         if not self.always_record and not self.always_load:
 
@@ -91,7 +93,7 @@ class DancingAgent(PostureRecognitionAgent):
                 self.always_load = True
                 load_to_file()
         else:
-            if self.always_record:  # function th check if there was selected always
+            if self.always_record:  # function to check if there was selected always
                 self.selected_input = 1
                 record_to_file(index)
             elif self.always_load:
@@ -101,7 +103,7 @@ class DancingAgent(PostureRecognitionAgent):
 
     def setup_waiting_thread(self, index):
         """
-        lets user choose between live recording end and end on key down.
+        lets user choose between stop robot together with music or on key down.
         """
         if self.selected_input == 1:
             waitForEnd(index)
@@ -113,7 +115,7 @@ class DancingAgent(PostureRecognitionAgent):
 
     def listen(self):
         """
-        This records 30s of music and returns it as music_ data
+        This records music and returns it as music_data
         """
 
         if not self.recorded and not self.RecordingThreadAlive:  # nothing was recorded yet and thread is not running
@@ -134,7 +136,7 @@ class DancingAgent(PostureRecognitionAgent):
         get the file from sensing, predict genre from it and set keyframes
         """
         if not self.recognized:
-            self.listen()  # start listening to a song or check if a running thread is finished
+            self.listen()  # start listening to a song or check if we finished recording
             if self.recorded:  # a recorded song exists
                 print("")
                 print("Detected a new recorded song, start analyzing...")  # start song processing
@@ -145,44 +147,45 @@ class DancingAgent(PostureRecognitionAgent):
                     print(f"Recognized the following genre: {self.music_genre}!")
                 except:
                     print(
-                        '\x1b[3;30;41m' + 'ERROR:' + '\x1b[0m' + '  Song was paused, overmodulated or recording is to short. Please try again!')
+                        '\x1b[3;30;41m' + 'ERROR:' + '\x1b[0m' + '  Song was paused, overmodulated or recording is to short. Please try again!') #throw error message
                     print("")
                     self.recorded = False
                     return super(DancingAgent, self).think(perception)
 
-                keyframes = self.keyframes_dictionary[self.music_genre]
+                keyframes = self.keyframes_dictionary[self.music_genre] #set the keyframes of the recognized genre
                 print("")
                 print('\x1b[6;30;42m' + 'Start Dancing!' + '\x1b[0m')
                 self.dance(keyframes)  # start dancing
-                self.recorded = False
-                self.recognized = True
-        else:  # if we detected a song, start waiting for end
-            # make dancing a loop
-            if self.keyframes == ([], [], []) and self.recognized and self.music_genre is not "unknown":
+                self.recorded = False  # set variable to false, that we know there is no recorded but not yet classified song
+                self.recognized = True  # set variable to true, that we know there is a recognized song
+        else:  # if we recognized a song and the robot is already dancing, start waiting for end
+            
+            # make dancing a loop, so that the robot continues
+            if self.keyframes == ([], [], []) and self.recognized and self.music_genre != "unknown":
                 print("")
-                print("Continuing to dance")
+                print("Continue to dance")
                 self.keyframes = self.keyframes_dictionary[self.music_genre]
 
+            #if we are not waiting for the end, start a new waiting thread
             if not self.WaitingThreadAlive:
                 self.thread = threading.Thread(target=self.setup_waiting_thread, args=(self.index,))
                 self.thread.daemon = True
                 self.thread.start()
                 self.WaitingThreadAlive = True
 
-            if not self.thread.is_alive():  # check if waiting thread finished
+            if not self.thread.is_alive():  # check if waiting thread finished, the user has stopped the music or pressed enter
                 self.WaitingThreadAlive = False
                 self.recorded = False
                 print('\x1b[0;30;47m' + 'Stopped Dancing!' + '\x1b[0m')
                 print("")
 
-                # TODO: make robot stop dancing HERE
                 self.start_time = -1
-                self.keyframes = ([], [], [])
+                self.keyframes = ([], [], [])   #stop keyframes
                 self.working = False
 
                 self.recognized = False
                 keyframes = self.keyframes_dictionary["default"]
-                self.dance(keyframes)  # robot goes in default bow and stand position
+                self.dance(keyframes)  # robot goes in default bow and continues with stand position
                 self.music_genre = "unknown"
 
         return super(DancingAgent, self).think(perception)
@@ -198,8 +201,8 @@ class DancingAgent(PostureRecognitionAgent):
 
 if __name__ == '__main__':
     os.chdir(os.path.join(os.path.dirname(__file__), '../joint_control'))
-    print("Current Working Directory ", os.getcwd())
+    #print("Current Working Directory ", os.getcwd())
     # print(os.path.join(os.path.abspath(os.path.dirname(__file__)), '..', 'joint_control'))
-    print(sys.path)
+    #print(sys.path)
     agent = DancingAgent()
     agent.run()
