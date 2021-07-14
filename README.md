@@ -6,7 +6,7 @@
 3. [Slides](https://docs.google.com/presentation/d/1gnjdcyrNOKNN7O094gugxx_e3Koedi6KGnUoQJ98D0k/edit?usp=sharing)
 
 ### Flow charts:
-![grafik](https://user-images.githubusercontent.com/64356366/125600250-5d058fe2-86c1-4483-acbc-73e002421a94.png)
+![grafik](https://github.com/cornelius-braun/robocup/blob/main/flowchart.png)
 Visualization  of the interfaces between the certain components.
 
 To edit the chart: import the flowchart.drawio file on https://app.diagrams.net/, change it, export it as png and don't forget to save changes and reupload the updated .drawio file to github.
