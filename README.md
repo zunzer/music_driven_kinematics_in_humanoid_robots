@@ -5,11 +5,16 @@
 2. [Documentation](https://docs.google.com/document/d/1CufPoTXPWW5sYlDkF2OL6iUg1hV41pW2VyHPGJyzTI8/edit?usp=sharing)
 3. [Slides](https://docs.google.com/presentation/d/1gnjdcyrNOKNN7O094gugxx_e3Koedi6KGnUoQJ98D0k/edit?usp=sharing)
 
-### Flow chart:
-![grafik](https://user-images.githubusercontent.com/64356366/122386702-6c952d00-cf6e-11eb-851c-c7b550f97f2c.png)
+### Flow charts:
+![grafik](https://github.com/cornelius-braun/robocup/blob/main/flowchart.png)
 Visualization  of the interfaces between the certain components.
 
 To edit the chart: import the flowchart.drawio file on https://app.diagrams.net/, change it, export it as png and don't forget to save changes and reupload the updated .drawio file to github.
+
+The final implementation with threading, to allow executing keyframes while waiting for an end, looks like this: 
+
+![grafik](https://user-images.githubusercontent.com/64356366/125600387-2b986d20-2f8e-43a0-822c-aee43dbde325.png)
+
 
 ### Chosen genres:
 - pop/disco
