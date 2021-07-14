@@ -1,7 +1,7 @@
 '''
 Note: You can select the microphone source at the beginning. 
 Due to the bad audio quality from microphones, we recommend to use internal recorded sound. 
-If it is not possible to set up your microphone successfully, you can load a .waf file from the sond directory. 
+If it is not possible to set up your microphone successfully, you can load a .wav file from the sound directory. 
 
 WINDOWS: 
     - dont use headphones 
