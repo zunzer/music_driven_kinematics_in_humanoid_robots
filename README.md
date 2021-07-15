@@ -10,8 +10,6 @@
 ![grafik](https://user-images.githubusercontent.com/64356366/125799531-ad9644c2-0b90-4fac-a492-2a2e91c87582.png)
 Visualization  of the interfaces between the certain components.
 
-To edit the chart: import the flowchart.drawio file on https://app.diagrams.net/, change it, export it as png and don't forget to save changes and reupload the updated .drawio file to github.
-
 The final implementation with threading, to allow executing keyframes while waiting for an end, looks like this: 
 
 ![grafik](https://user-images.githubusercontent.com/64356366/125600387-2b986d20-2f8e-43a0-822c-aee43dbde325.png)
