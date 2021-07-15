@@ -1,7 +1,7 @@
 # Robocup Project
 
 ### Documents:
-1. [Proposal](https://docs.google.com/document/d/139C3r5uC-RRzDMXRm0g1Ai2ML-xSVXDXS0IiixRRfbA/edit?usp=sharing)
+1. [Proposal](initial_concept.pdf)
 2. [Documentation](https://docs.google.com/document/d/1CufPoTXPWW5sYlDkF2OL6iUg1hV41pW2VyHPGJyzTI8/edit?usp=sharing)
 3. [Slides](https://docs.google.com/presentation/d/1gnjdcyrNOKNN7O094gugxx_e3Koedi6KGnUoQJ98D0k/edit?usp=sharing)
 4. [Demonstration](https://tubcloud.tu-berlin.de/s/J9jYsGp4WJbxTEZ)
