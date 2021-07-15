@@ -2,7 +2,7 @@
 
 ### Documents:
 1. [Proposal](initial_concept.pdf)
-2. [Documentation](https://docs.google.com/document/d/1CufPoTXPWW5sYlDkF2OL6iUg1hV41pW2VyHPGJyzTI8/edit?usp=sharing)
+2. [Documentation](documentation.pdf)
 3. [Slides](slides.pdf)
 4. [Demonstration](demo_video.mp4)
 
