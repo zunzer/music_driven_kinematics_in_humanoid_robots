@@ -7,7 +7,7 @@
 4. [Demonstration](demo_video.mp4)
 
 ### Flow charts:
-![grafik](https://github.com/cornelius-braun/robocup/blob/main/flowchart.png)
+![grafik](https://user-images.githubusercontent.com/64356366/125799531-ad9644c2-0b90-4fac-a492-2a2e91c87582.png)
 Visualization  of the interfaces between the certain components.
 
 To edit the chart: import the flowchart.drawio file on https://app.diagrams.net/, change it, export it as png and don't forget to save changes and reupload the updated .drawio file to github.
