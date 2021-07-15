@@ -3,7 +3,7 @@
 ### Documents:
 1. [Proposal](initial_concept.pdf)
 2. [Documentation](documentation.pdf)
-3. [Slides](slides.pdf)
+3. [Slides](presentation.pdf)
 4. [Demonstration](demo_video.mp4)
 
 ### Flow charts:
