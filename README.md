@@ -21,27 +21,13 @@ The final implementation with threading, to allow executing keyframes while wait
 - metal/rock
 
 ## 1.) Sensing
-### Record and save the music (with microphone played by external device or use internal stereomix microphone) (Seraphin)
-TODO:
-- [X] Record music over microphone and stereomix 
-- [X] Clean and normalize audio, so that the genre classification works (depends on mic quality. Added file loading option)
+### Record and save the music (with microphone played by external device or use internal stereomix microphone)
 
 ## 2.) Thinking
-### Process music and choose corresponding genre and dance/keyframes (Cornelius)
-TODO:
-- [x] Be able to recognize music from file. To do so, either filter training data or change the NN.
+### Process music and choose corresponding genre and dance/keyframes
 
 ## 3.) Acting
-### Generate dance moves/keyframes (Emi) 
-Take a look at: https://www.youtube.com/watch?v=ikNX8A-3P98
-- [X] Implement full dances, choose one based on music?
-- [X] Installing software Choregraphe
-- [X] Generate keyframes for each genre
+### Generate dance moves/keyframes
 
-## General TODO:
-- [x] Determine which genres we want to detect
-- [X] Determine the length of the music and the corresponding dace. (= solved by looping dance and stopping dance when music staps)
-- [X] Write the full loop 
-- [X] Optional: Stop dancing if we stop music
 
    
